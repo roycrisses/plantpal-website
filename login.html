@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - PlantPal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e9 50%, #f1f8e9 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating plant decorations */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      width: 200px;
+      height: 200px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,20 Q60,10 70,20 Q80,30 70,40 Q60,50 50,40 Q40,30 50,20 Z" fill="%232e7d32" opacity="0.1"/><path d="M30,60 Q40,50 50,60 Q60,70 50,80 Q40,90 30,80 Q20,70 30,60 Z" fill="%23388e3c" opacity="0.08"/><path d="M70,70 Q80,60 90,70 Q100,80 90,90 Q80,100 70,90 Q60,80 70,70 Z" fill="%2366bb6a" opacity="0.06"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      z-index: 0;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    body::before {
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    body::after {
+      bottom: 10%;
+      right: 5%;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 2px 20px rgba(46,125,50,0.1);
+      border-bottom: 1px solid rgba(46,125,50,0.1);
+      z-index: 1000;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2e7d32;
+    }
+
+    .nav-brand a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-brand i {
+      font-size: 1.8rem;
+      color: #4caf50;
+    }
+
+    .nav-links a {
+      margin-left: 1.5rem;
+      font-size: 1rem;
+      color: #555;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: #2e7d32;
+      transform: translateY(-2px);
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      box-shadow: 
+        0 20px 60px rgba(46,125,50,0.15),
+        0 0 0 1px rgba(46,125,50,0.05);
+      overflow: hidden;
+      width: 100%;
+      max-width: 1000px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 650px;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(10px);
+    }
+
+    .login-image {
+      background: linear-gradient(135deg, #2e7d32 0%, #388e3c 50%, #4caf50 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    }
+
+    .login-image-content {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 1;
+      padding: 3rem;
+    }
+
+    .login-image-content i {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .login-image-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .login-image-content p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .login-form {
+      padding: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: white;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .form-header h1 {
+      color: #2e7d32;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .form-header p {
+      color: #666;
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .form-group {
+      margin-bottom: 1.8rem;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.8rem;
+      color: #333;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 1.2rem 1rem;
+      border: 2px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #fafafa;
+      font-weight: 500;
+    }
+
+    .password-field input {
+      padding-right: 3rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #4caf50;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(76,175,80,0.1);
+      transform: translateY(-2px);
+    }
+
+    .form-group.error input {
+      border-color: #f44336;
+      box-shadow: 0 0 0 4px rgba(244,67,54,0.1);
+    }
+
+    .form-group.success input {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 4px rgba(76,175,80,0.1);
+    }
+
+    .error-message {
+      color: #f44336;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none;
+      font-weight: 500;
+    }
+
+    .success-message {
+      color: #4caf50;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      display: none;
+      font-weight: 500;
+    }
+
+    .form-group.error .error-message {
+      display: block;
+    }
+
+    .form-group.success .success-message {
+      display: block;
+    }
+
+    .password-field {
+      position: relative;
+    }
+
+    .password-field input {
+      padding-right: 3rem;
+    }
+
+    /* CSS method to show password */
+    .password-field input.show-password {
+      -webkit-text-security: none !important;
+      text-security: none !important;
+      /* Additional fallbacks for better browser compatibility */
+      -moz-text-security: none;
+      -ms-text-security: none;
+      /* Force text to be visible */
+      color: #333 !important;
+      background-color: white !important;
+    }
+
+    /* Ensure password field always has proper styling */
+    .password-field input[type="password"] {
+      -webkit-text-security: disc;
+      text-security: disc;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .password-toggle:hover {
+      color: #4caf50;
+      background: rgba(76,175,80,0.1);
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: #4caf50;
+    }
+
+    .remember-me span {
+      font-weight: 500;
+      color: #555;
+    }
+
+    .forgot-password {
+      color: #4caf50;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .forgot-password:hover {
+      color: #2e7d32;
+      text-decoration: underline;
+    }
+
+    .btn {
+      padding: 1.2rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(76,175,80,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(76,175,80,0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .divider {
+      text-align: center;
+      margin: 2.5rem 0;
+      position: relative;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+    }
+
+    .divider span {
+      background: white;
+      padding: 0 1.5rem;
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .social-login {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .social-btn {
+      flex: 1;
+      padding: 1rem;
+      border: 2px solid #e8e8e8;
+      border-radius: 12px;
+      background: white;
+      color: #333;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .social-btn:hover {
+      border-color: #4caf50;
+      color: #4caf50;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(76,175,80,0.1);
+    }
+
+    .register-link {
+      text-align: center;
+      color: #666;
+      margin-top: 1rem;
+    }
+
+    .register-link a {
+      color: #4caf50;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .register-link a:hover {
+      color: #2e7d32;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+        margin: 2rem;
+      }
+      
+      .login-image {
+        display: none;
+      }
+      
+      .login-form {
+        padding: 2.5rem;
+      }
+      
+      .social-login {
+        flex-direction: column;
+      }
+
+      body::before,
+      body::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="dock.html">
+        <i class="fas fa-leaf"></i>PlantPal
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="dock.html">Home</a>
+      <a href="https://identify.plantnet.org/">Plants</a>
+      <a href="favorites.html">Favorites</a>
+      <a href="https://www.thrive.org.uk/get-gardening/caring-for-houseplants">Care Tips</a>
+    </div>
+  </nav>
+
+  <div class="login-container">
+    <div class="login-image">
+      <div class="login-image-content">
+        <i class="fas fa-seedling"></i>
+        <h2>Welcome Back!</h2>
+        <p>Sign in to continue your plant care journey and access your personalized recommendations.</p>
+      </div>
+    </div>
+    
+    <div class="login-form">
+      <div class="form-header">
+        <h1>Sign In</h1>
+        <p>Enter your credentials to access your account</p>
+      </div>
+      
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group" id="emailGroup">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required placeholder="Enter your email">
+          <div class="error-message" id="emailError"></div>
+        </div>
+        
+        <div class="form-group" id="passwordGroup">
+          <label for="password">Password</label>
+          <div class="password-field">
+            <input type="password" id="password" name="password" required placeholder="Enter your password">
+            <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <div class="error-message" id="passwordError"></div>
+        </div>
+        
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe">
+            <span>Remember me</span>
+          </label>
+          <a href="forgot-password.html" class="forgot-password">Forgot Password?</a>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" id="loginBtn">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+      </form>
+      
+      <div class="divider">
+        <span>or continue with</span>
+      </div>
+      
+      <div class="social-login">
+        <a href="#" class="social-btn" onclick="socialLogin('google')">
+          <i class="fab fa-google"></i>
+          <span>Google</span>
+        </a>
+        <a href="#" class="social-btn" onclick="socialLogin('facebook')">
+          <i class="fab fa-facebook-f"></i>
+          <span>Facebook</span>
+        </a>
+      </div>
+      
+      <div class="register-link">
+        <p>Don't have an account? <a href="register.html">Sign up here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const toggleBtn = document.querySelector('.password-toggle i');
+      
+      // Toggle the CSS class instead of changing input type
+      if (passwordInput.classList.contains('show-password')) {
+        // Hide password
+        passwordInput.classList.remove('show-password');
+        toggleBtn.className = 'fas fa-eye';
+      } else {
+        // Show password
+        passwordInput.classList.add('show-password');
+        toggleBtn.className = 'fas fa-eye-slash';
+      }
+      
+      // Keep focus on the input
+      passwordInput.focus();
+    }
+
+    function validateEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function showError(groupId, message) {
+      const group = document.getElementById(groupId);
+      const errorElement = group.querySelector('.error-message');
+      
+      group.classList.remove('success');
+      group.classList.add('error');
+      errorElement.textContent = message;
+    }
+
+    function showSuccess(groupId, message) {
+      const group = document.getElementById(groupId);
+      const successElement = group.querySelector('.success-message');
+      
+      group.classList.remove('error');
+      group.classList.add('success');
+      successElement.textContent = message;
+    }
+
+    function clearError(groupId) {
+      const group = document.getElementById(groupId);
+      const errorElement = group.querySelector('.error-message');
+      const successElement = group.querySelector('.success-message');
+      
+      group.classList.remove('error', 'success');
+      errorElement.textContent = '';
+      if (successElement) successElement.textContent = '';
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
+      
+      // Clear previous errors
+      clearError('emailGroup');
+      clearError('passwordGroup');
+      
+      // Validate email
+      if (!email) {
+        showError('emailGroup', 'Email is required');
+        return;
+      }
+      
+      if (!validateEmail(email)) {
+        showError('emailGroup', 'Please enter a valid email address');
+        return;
+      }
+      
+      // Validate password
+      if (!password) {
+        showError('passwordGroup', 'Password is required');
+        return;
+      }
+      
+      if (password.length < 6) {
+        showError('passwordGroup', 'Password must be at least 6 characters');
+        return;
+      }
+      
+      // Disable button and show loading state
+      const loginBtn = document.getElementById('loginBtn');
+      const originalText = loginBtn.innerHTML;
+      loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+      loginBtn.disabled = true;
+      
+      // Simulate login process
+      setTimeout(() => {
+        // Store user data in localStorage (in a real app, this would be handled by a backend)
+        const userData = {
+          email: email,
+          name: email.split('@')[0], // Simple name extraction
+          isLoggedIn: true,
+          loginTime: new Date().toISOString()
+        };
+        
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        // Show success message
+        alert('Login successful! Welcome back to PlantPal.');
+        
+        // Redirect to main page
+        window.location.href = 'dock.html';
+      }, 2000);
+    }
+
+    async function socialLogin(provider) {
+      if (provider === 'google') {
+        try {
+          // Show loading state
+          const googleBtn = document.querySelector('.social-btn[onclick*="google"]');
+          const originalContent = googleBtn.innerHTML;
+          googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+          googleBtn.disabled = true;
+
+          // Initialize auth if not already done
+          if (!window.auth) {
+            // Load auth.js if not already loaded
+            const script = document.createElement('script');
+            script.src = 'js/auth.js';
+            document.head.appendChild(script);
+            
+            // Wait for auth to load
+            await new Promise(resolve => {
+              script.onload = resolve;
+            });
+          }
+
+          // Call Google OAuth
+          await window.auth.googleLogin();
+        } catch (error) {
+          console.error('Google login error:', error);
+          alert('Failed to connect to Google. Please try again.');
+          
+          // Reset button
+          const googleBtn = document.querySelector('.social-btn[onclick*="google"]');
+          googleBtn.innerHTML = '<i class="fab fa-google"></i><span>Google</span>';
+          googleBtn.disabled = false;
+        }
+      } else {
+        alert(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login functionality would be implemented here.`);
+        console.log(`Social login with ${provider}`);
+      }
+    }
+
+    // Check if user is already logged in
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load auth.js
+      const script = document.createElement('script');
+      script.src = 'js/auth.js';
+      document.head.appendChild(script);
+      
+      script.onload = function() {
+        // Check for Google OAuth callback
+        const callbackResult = window.auth.handleGoogleCallback();
+        if (callbackResult && callbackResult.success) {
+          return; // Already handled redirect
+        }
+        
+        // Check if user is already logged in
+        if (window.auth.isAuthenticated()) {
+          window.location.href = 'dock.html';
+        }
+      };
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,1112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlantPal - Your Plant Care Companion</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f3f3f3;
+      color: #333;
+      line-height: 1.6;
+   
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-bottom: 2px solid #e0e0e0; /* Added border */
+      transition: box-shadow 0.4s cubic-bezier(0.4,0,0.2,1), border-color 0.4s cubic-bezier(0.4,0,0.2,1), background 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .navbar:hover {
+      box-shadow: 0 6px 24px rgba(46,125,50,0.12);
+      border-bottom: 2px solid #2e7d32; /* Animated border color on hover */
+      background: linear-gradient(to right, #e8f5e9 60%, #f1f8e9 100%);
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+
+    .nav-brand i {
+      margin-right: 0.5rem;
+    }
+
+    .nav-links a {
+      margin-left: 1.5rem;
+      font-size: 1rem;
+      color: #555;
+      transition: color 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-links a::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 100%;
+      height: 2px;
+      background: #2e7d32;
+      transform: scaleX(0);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      border-radius: 2px;
+    }
+
+    .nav-links a:hover {
+      color: #2e7d32;
+    }
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    .cart-icon {
+      position: relative;
+      margin-left: 1.5rem;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: #e74c3c;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .auth-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-left: 1.5rem;
+    }
+
+    .btn-login, .btn-register {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-login {
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+    }
+
+    .btn-login:hover {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .btn-register {
+      background: #2e7d32;
+      color: white !important;
+    }
+
+    .btn-register:hover {
+      background: #1b5e20;
+      transform: translateY(-2px);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-left: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .user-profile:hover {
+      background: rgba(46,125,50,0.1);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      background: #2e7d32;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .user-name {
+      color: #333;
+      font-weight: 500;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      min-width: 150px;
+      z-index: 1000;
+      display: none;
+      overflow: hidden;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 0.8rem 1rem;
+      color: #333;
+      text-decoration: none;
+      display: block;
+      transition: background 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+      background: #f5f5f5;
+    }
+
+    .dropdown-item.logout {
+      color: #e74c3c;
+      border-top: 1px solid #eee;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+      position: relative;
+      overflow: hidden;
+      animation: heroFadeIn 1.2s ease;
+    }
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: none; }
+    }
+    .hero-leaf-svg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: auto;
+      z-index: 0;
+      opacity: 0.18;
+      pointer-events: none;
+    }
+    @media (max-width: 700px) {
+      .hero-leaf-svg { width: 120px; }
+    }
+    .hero-bg-svg {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 340px;
+      max-width: 60vw;
+      height: auto;
+      z-index: 0;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      .hero-bg-svg { width: 180px; }
+    }
+    @media (max-width: 600px) {
+      .hero-bg-svg { width: 100px; }
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .search-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .search-container input,
+    .search-container select {
+      padding: 0.6rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 200px;
+      box-shadow: 0 2px 12px rgba(46,125,50,0.08);
+      transition: box-shadow 0.3s;
+    }
+    .search-container input:focus,
+    .search-container select:focus {
+      box-shadow: 0 4px 18px rgba(46,125,50,0.18);
+      outline: none;
+      border-color: #2e7d32;
+    }
+    .hero-cta-btn {
+      margin-top: 1.2rem;
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.8rem 2.2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(46,125,50,0.10);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .hero-cta-btn:hover {
+      background: #256025;
+      transform: translateY(-2px) scale(1.04);
+    }
+    .hero-fact {
+      margin-top: 1.5rem;
+      color: #388e3c;
+      font-size: 1.05rem;
+      font-style: italic;
+      background: rgba(232,245,233,0.7);
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(46,125,50,0.07);
+    }
+
+    .featured-categories {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .category-grid {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .category-card {
+      width: 200px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .category-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .category-card h3 {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #2e7d32;
+    }
+
+    .plant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .plant-card {
+      background-color: #ffffff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .plant-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .plant-card h4 {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: #2e7d32;
+      font-size: 1.1rem;
+    }
+
+    .plant-card p {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.4;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .plant-card .price {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2e7d32;
+      margin-bottom: 1rem;
+    }
+
+    .plant-card .buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .plant-card .buttons .btn {
+      flex: 1;
+      min-width: 0;
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background-color: #2e7d32;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #1b5e20;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+    }
+
+    .btn-secondary {
+      background-color: #f5f5f5;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+      background-color: #2e7d32;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+    }
+
+    .btn i {
+      font-size: 0.9rem;
+    }
+
+    .btn-favorite {
+      background-color: transparent;
+      color: #ccc;
+      border: none;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .btn-favorite:hover {
+      color: #ff6b6b;
+      transform: scale(1.1);
+    }
+
+    .btn-favorite.added {
+      color: #ff6b6b;
+      animation: heartBeat 0.6s ease;
+    }
+
+    .btn-favorite.added:hover {
+      color: #ff5252;
+      transform: scale(1.1);
+    }
+
+    .btn-favorite i {
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(1.1); }
+      75% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .plant-card {
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    footer {
+      background-color: #fff;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid #eee;
+    }
+
+    .social-links a {
+      margin: 0 0.5rem;
+      color: #2e7d32;
+      font-size: 1.2rem;
+    }
+
+    .category-card.selected-glow {
+      box-shadow: 
+        0 0 20px 8px rgba(46,125,50,0.6),
+        0 0 40px 16px rgba(76,175,80,0.4),
+        0 0 60px 24px rgba(129,199,132,0.2),
+        0 0 0 4px #2e7d32,
+        0 8px 32px rgba(46,125,50,0.3);
+      border: 3px solid transparent;
+      background: 
+        linear-gradient(45deg, #dbe9dc, #f2f3f2, #e4ede4, #e5ede5),
+        linear-gradient(45deg, #e8f5e9, #f1f8e9);
+      background-clip: padding-box, border-box;
+      background-origin: padding-box, border-box;
+      position: relative;
+      z-index: 10;
+      transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+      transform: scale(1.05);
+      backdrop-filter: blur(10px);
+    }
+
+    .category-card.selected-glow::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: radial-gradient(circle, rgba(46,125,50,0.1) 0%, rgba(76,175,80,0.05) 50%, transparent 100%);
+      border-radius: 12px;
+      z-index: -1;
+      filter: blur(15px);
+      animation: glowPulse 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!--this part has linked navigation bar to redirected website-->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="dock.html" style="color: inherit; text-decoration: none;">
+        <i class="fas fa-leaf"></i>PlantPal
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="dock.html">Home</a>
+      <a href="https://identify.plantnet.org/">Plants</a>
+      <a href="favorites.html">Favorites</a>
+      <a href="https://www.thrive.org.uk/get-gardening/caring-for-houseplants">Care Tips</a>
+      <a href="cart.html" class="cart-icon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <div class="auth-links" id="authLinks">
+        <a href="login.html" class="btn-login">Sign In</a>
+        <a href="register.html" class="btn-register">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="home">
+    <svg class="hero-leaf-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M60,300 Q120,180 220,220 Q320,260 380,100 Q340,180 260,120 Q180,60 100,100 Q20,140 60,300 Z" fill="#388e3c"/>
+      <path d="M80,280 Q130,200 210,210 Q290,220 350,120 Q320,170 250,130 Q180,90 120,120 Q60,150 80,280 Z" fill="#66bb6a"/>
+    </svg>
+    <svg class="hero-bg-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="300" cy="320" rx="90" ry="60" fill="#81c784"/>
+      <path d="M320,340 Q340,300 380,320 Q360,350 320,340 Z" fill="#388e3c"/>
+      <path d="M250,320 Q270,270 320,320 Q300,350 250,320 Z" fill="#43a047"/>
+      <path d="M320,320 Q330,290 370,300 Q350,340 320,320 Z" fill="#66bb6a"/>
+      <path d="M270,350 Q290,320 320,340 Q300,370 270,350 Z" fill="#388e3c"/>
+    </svg>
+    <div class="hero-content">
+      <h1>Welcome to PlantPal</h1>
+      <p>Your personal guide to keeping your plants healthy and happy</p>
+      <div class="search-container">
+        <input type="text" id="plantSearch" placeholder="Search plants..." />
+        <select id="categorySelect">
+          <option value="all">All Categories</option>
+          <option value="indoor">Indoor</option>
+          <option value="outdoor">Outdoor</option>
+          <option value="succulents">Succulents</option>
+        </select>
+      </div>
+      <button class="hero-cta-btn" onclick="window.scrollTo({top: document.getElementById('categories').offsetTop-40, behavior: 'smooth'});">Shop Plants</button>
+      <div class="hero-fact">Did you know? Houseplants can boost your mood, productivity, and even purify the air!</div>
+    </div>
+  </header>
+ 
+  <section class="featured-categories" id="categories"> 
+    <h2>Browse by Category</h2>
+    <div class="category-grid">
+      <div class="category-card" id="indoor-category">
+        <img src="https://i.pinimg.com/736x/5e/69/ca/5e69cac5269c40202c8ab027400e5067.jpg" alt="Indoor Plants" />
+        <h3>Indoor Plants</h3>
+      </div>
+      <div class="category-card" id="outdoor-category">
+        <img src="https://i.pinimg.com/736x/1c/32/cb/1c32cb384dd1c84abe6f0512c7dfee4b.jpg" alt="Outdoor Plants" />
+        <h3>Outdoor Plants</h3>
+      </div>
+      <div class="category-card" id="succulents-category">
+        <img src="https://i.pinimg.com/1200x/2c/3e/bd/2c3ebd33395bc031494f23843b285f95.jpg" alt="Succulents" />
+        <h3>Succulents</h3>
+      </div>
+    </div>
+  </section>
+<!--this part has linked plant images  i used pintrest for the images just copied tthe image link address and pasted it in img src -->
+  <section class="plant-grid" id="plants">
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/1200x/4a/73/d9/4a73d910356e9744ab418a7f1244ad74.jpg" alt="Snake Plant" />
+      <h4>Snake Plant</h4>
+      <p>A hardy, low-maintenance plant perfect for beginners. Known for its air-purifying qualities and ability to thrive in low light conditions. Water sparingly and it will reward you with beautiful, upright leaves.</p>
+      <div class="price">$24.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Snake Plant', 24.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Snake Plant', 24.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Snake Plant', 24.99, this)" data-plant="Snake Plant"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/1200x/1c/20/53/1c205357736bb979b40389d1e3064891.jpg" alt="Fiddle Leaf Fig" />
+      <h4>Fiddle Leaf Fig</h4>
+      <p>A stunning statement plant with large, glossy leaves that add tropical elegance to any space. Prefers bright, indirect light and consistent watering. Perfect for creating a focal point in your home.</p>
+      <div class="price">$89.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Fiddle Leaf Fig', 89.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Fiddle Leaf Fig', 89.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Fiddle Leaf Fig', 89.99, this)" data-plant="Fiddle Leaf Fig"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/07/95/94/079594f8aa485447059bc63e9ea65649.jpg" alt="Aloe Vera" />
+      <h4>Aloe Vera</h4>
+      <p>A versatile succulent known for its medicinal properties. The gel inside its leaves can soothe burns and skin irritations. Thrives in bright light with minimal watering, making it ideal for busy plant parents.</p>
+      <div class="price">$18.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Aloe Vera', 18.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Aloe Vera', 18.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Aloe Vera', 18.99, this)" data-plant="Aloe Vera"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/1200x/f8/29/f7/f829f712be72d70087d3a2e5f4bcb9ef.jpg" alt="Monstera Deliciosa" />
+      <h4>Monstera Deliciosa</h4>
+      <p>The iconic Swiss Cheese Plant with distinctive split leaves. This tropical beauty grows quickly and can reach impressive sizes. Prefers bright, indirect light and moderate humidity. Perfect for creating a jungle vibe.</p>
+      <div class="price">$129.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Monstera Deliciosa', 129.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Monstera Deliciosa', 129.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Monstera Deliciosa', 129.99, this)" data-plant="Monstera Deliciosa"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/69/82/27/698227c4bddc98bf82260eab22548d93.jpg" alt="Pothos" />
+      <h4>Golden Pothos</h4>
+      <p>A trailing vine with heart-shaped leaves featuring beautiful golden variegation. Extremely forgiving and perfect for hanging baskets. Thrives in low to bright light and can go weeks without water. Great for beginners!</p>
+      <div class="price">$19.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Golden Pothos', 19.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Golden Pothos', 19.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Golden Pothos', 19.99, this)" data-plant="Golden Pothos"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/33/c5/71/33c571eb5905de9a7f5acea3bf11263d.jpg" alt="ZZ Plant" />
+      <h4>ZZ Plant</h4>
+      <p>Known as the "Eternity Plant" for its incredible resilience. Glossy, dark green leaves that shine like they've been polished. Thrives in low light and requires minimal care. Perfect for offices or dark corners.</p>
+      <div class="price">$34.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('ZZ Plant', 34.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('ZZ Plant', 34.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('ZZ Plant', 34.99, this)" data-plant="ZZ Plant"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/68/2d/17/682d17899a57e938d88457b925493e95.jpg" alt="Peace Lily" />
+      <h4>Peace Lily</h4>
+      <p>Elegant white flowers and glossy green leaves make this a popular choice. Excellent air purifier that will tell you when it needs water by drooping its leaves. Prefers medium to low light and high humidity.</p>
+      <div class="price">$29.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Peace Lily', 29.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Peace Lily', 29.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Peace Lily', 29.99, this)" data-plant="Peace Lily"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/43/13/60/4313606b73807a3b379967a5d0d78939.jpg" alt="Chinese Evergreen" />
+      <h4>Chinese Evergreen</h4>
+      <p>Beautiful variegated leaves in shades of green, silver, and sometimes red. One of the most adaptable houseplants, tolerating low light and irregular watering. Perfect for adding color to any room.</p>
+      <div class="price">$22.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Chinese Evergreen', 22.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Chinese Evergreen', 22.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Chinese Evergreen', 22.99, this)" data-plant="Chinese Evergreen"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/d4/12/9e/d4129ec39101e158ad352478c6e58a89.jpg" alt="Spider Plant" />
+      <h4>Spider Plant</h4>
+      <p>Produces long, arching leaves and baby plantlets that dangle like spiders on a web. Excellent air purifier and very easy to propagate. Thrives in bright, indirect light and moderate watering. Perfect for hanging baskets.</p>
+      <div class="price">$16.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Spider Plant', 16.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Spider Plant', 16.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Spider Plant', 16.99, this)" data-plant="Spider Plant"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/57/d6/32/57d632b6c0373ba40bcd8f2062eccacb.jpg" alt="Rubber Plant" />
+      <h4>Rubber Plant</h4>
+      <p>Large, glossy leaves with a deep burgundy color. Can grow into a small tree indoors. Prefers bright, indirect light and moderate watering. Known for its air-purifying qualities and dramatic appearance.</p>
+      <div class="price">$49.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Rubber Plant', 49.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Rubber Plant', 49.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Rubber Plant', 49.99, this)" data-plant="Rubber Plant"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/2c/44/c9/2c44c9ac160ecf5891541c9dab72518e.jpg" alt="String of Pearls" />
+      <h4>String of Pearls</h4>
+      <p>A unique succulent with trailing stems covered in small, round leaves that look like pearls. Perfect for hanging planters or high shelves. Requires bright light and minimal watering. Creates a stunning cascading effect.</p>
+      <div class="price">$14.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('String of Pearls', 14.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('String of Pearls', 14.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('String of Pearls', 14.99, this)" data-plant="String of Pearls"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/ec/a2/c3/eca2c30e0d6fd321616fd01fc40e8dab.jpg" alt="Bird of Paradise" />
+      <h4>Bird of Paradise</h4>
+      <p>Large, banana-like leaves that create a tropical paradise indoors. Can produce stunning orange and blue flowers that resemble exotic birds. Prefers bright light and regular watering. Makes a bold statement in any space.</p>
+      <div class="price">$79.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Bird of Paradise', 79.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Bird of Paradise', 79.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Bird of Paradise', 79.99, this)" data-plant="Bird of Paradise"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/cf/7f/d2/cf7fd2d293f724845526af55d53f8363.jpg" alt="Calathea" />
+      <h4>Calathea Orbifolia</h4>
+      <p>Stunning leaves with silver stripes and a velvety texture. Known as "Prayer Plants" because their leaves fold up at night. Requires high humidity and indirect light. Perfect for creating a lush, tropical atmosphere.</p>
+      <div class="price">$39.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Calathea Orbifolia', 39.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Calathea Orbifolia', 39.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Calathea Orbifolia', 39.99, this)" data-plant="Calathea Orbifolia"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/42/d6/15/42d6157833b8cc6cdbeaa6899f8714ae.jpg" alt="Jade Plant" />
+      <h4>Jade Plant</h4>
+      <p>A classic succulent with thick, woody stems and fleshy green leaves. Considered a symbol of good luck and prosperity. Very drought-tolerant and can live for decades. Perfect for sunny windowsills.</p>
+      <div class="price">$12.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Jade Plant', 12.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Jade Plant', 12.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Jade Plant', 12.99, this)" data-plant="Jade Plant"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/1200x/ed/5c/ac/ed5cac5de5a4d4aaec9fa4af90e95bb7.jpg" alt="Philodendron" />
+      <h4>Heartleaf Philodendron</h4>
+      <p>Classic trailing plant with heart-shaped leaves that cascade beautifully. Extremely easy to care for and perfect for beginners. Thrives in low to bright light and moderate watering. Great for hanging baskets or climbing up moss poles.</p>
+      <div class="price">$21.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Heartleaf Philodendron', 21.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Heartleaf Philodendron', 21.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Heartleaf Philodendron', 21.99, this)" data-plant="Heartleaf Philodendron"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+    <div class="plant-card">
+      <img src="https://i.pinimg.com/736x/52/01/c3/5201c3f411e4e11ad624584a8826c39b.jpg" alt="Dracaena" />
+      <h4>Dracaena Marginata</h4>
+      <p>Also known as the Dragon Tree, featuring thin, sword-like leaves with red edges. Very low-maintenance and excellent for purifying indoor air. Tolerates low light and irregular watering. Perfect for modern, minimalist spaces.</p>
+      <div class="price">$27.99</div>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="buyNow('Dracaena Marginata', 27.99)">Buy Now</button>
+        <button class="btn btn-secondary" onclick="addToCart('Dracaena Marginata', 27.99)"><i class="fas fa-shopping-cart"></i>Cart</button>
+        <button class="btn btn-favorite" onclick="addToFavorites('Dracaena Marginata', 27.99, this)" data-plant="Dracaena Marginata"><i class="fas fa-heart"></i></button>
+      </div>
+    </div>
+  </section>
+<!--this part i have linked my own social media accounts -->
+  <footer>
+    <p>© 2025 PlantPal — Your trusted plant care companion</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/krishnakarki_019/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.facebook.com/krishna.karki.739201" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+      <a href="https://x.com/m_Krishnakarki" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      
+    </div>
+  </footer>
+<script>
+  // Shopping cart functionality
+  let cart = [];
+  let cartTotal = 0;
+  
+  // Favorites functionality
+  let favorites = JSON.parse(localStorage.getItem('plantFavorites')) || [];
+
+  function buyNow(plantName, price) {
+    alert(`Thank you for your purchase! You've bought ${plantName} for $${price}. Redirecting to checkout...`);
+    // In a real e-commerce site, this would redirect to a checkout page
+    console.log(`Buy Now: ${plantName} - $${price}`);
+  }
+
+  function addToCart(plantName, price) {
+    cart.push({ name: plantName, price: price });
+    cartTotal += price;
+    
+    // Show success message
+    const button = event.target;
+    const originalText = button.textContent;
+    button.textContent = 'Added!';
+    button.style.backgroundColor = '#4caf50';
+    button.style.color = 'white';
+    
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.style.backgroundColor = '';
+      button.style.color = '';
+    }, 1000);
+    
+    // Update cart display
+    updateCartDisplay();
+    console.log(`Added to cart: ${plantName} - $${price}`);
+  }
+
+  function updateCartDisplay() {
+    // Update cart count in navbar
+    const cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+      cartCount.textContent = cart.length;
+    }
+    console.log(`Cart total: $${cartTotal.toFixed(2)}`);
+    console.log(`Items in cart: ${cart.length}`);
+  }
+
+  function addToFavorites(plantName, price, buttonElement) {
+    const plantData = {
+      id: Date.now(),
+      name: plantName,
+      price: price,
+      addedAt: new Date().toISOString()
+    };
+    
+    // Check if plant is already in favorites
+    const existingIndex = favorites.findIndex(fav => fav.name === plantName);
+    
+    if (existingIndex === -1) {
+      // Add to favorites
+      favorites.push(plantData);
+      localStorage.setItem('plantFavorites', JSON.stringify(favorites));
+      
+      // Update button appearance
+      buttonElement.classList.add('added');
+      buttonElement.innerHTML = '<i class="fas fa-heart"></i>';
+      
+      // Show success message
+      showNotification(`${plantName} added to favorites!`, 'success');
+      
+      console.log(`Added to favorites: ${plantName} - $${price}`);
+    } else {
+      // Remove from favorites
+      favorites.splice(existingIndex, 1);
+      localStorage.setItem('plantFavorites', JSON.stringify(favorites));
+      
+      // Update button appearance
+      buttonElement.classList.remove('added');
+      buttonElement.innerHTML = '<i class="fas fa-heart"></i>';
+      
+      // Show removal message
+      showNotification(`${plantName} removed from favorites!`, 'info');
+      
+      console.log(`Removed from favorites: ${plantName}`);
+    }
+  }
+
+  function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: ${type === 'success' ? '#4caf50' : type === 'info' ? '#2196f3' : '#f44336'};
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 10000;
+      animation: slideIn 0.3s ease;
+      font-weight: 500;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => {
+        if (document.body.contains(notification)) {
+          document.body.removeChild(notification);
+        }
+      }, 300);
+    }, 3000);
+  }
+
+  // Add CSS animations for notifications
+  const notificationStyle = document.createElement('style');
+  notificationStyle.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(notificationStyle);
+
+  function initializeFavoriteButtons() {
+    // Get all favorite buttons
+    const favoriteButtons = document.querySelectorAll('.btn-favorite');
+    
+    favoriteButtons.forEach(button => {
+      const plantName = button.getAttribute('data-plant');
+      
+      // Check if this plant is in favorites
+      const isInFavorites = favorites.some(fav => fav.name === plantName);
+      
+      if (isInFavorites) {
+        // Update button to show it's already favorited
+        button.classList.add('added');
+        button.innerHTML = '<i class="fas fa-heart"></i>';
+      }
+    });
+  }
+
+  function viewCart() {
+    if (cart.length === 0) {
+      alert('Your cart is empty!');
+      return;
+    }
+    
+    let cartItems = cart.map(item => `${item.name} - $${item.price}`).join('\n');
+    alert(`Your Cart:\n${cartItems}\n\nTotal: $${cartTotal.toFixed(2)}`);
+  }
+
+  window.addEventListener('DOMContentLoaded', function() {
+    // Check authentication status and update UI
+    checkAuthStatus();
+    
+    // Initialize favorite button states
+    initializeFavoriteButtons();
+    
+    // Play click sound on any click
+    document.addEventListener('click', function() {
+      // Add any click functionality here if needed
+    });
+    
+    var select = document.getElementById('categorySelect');
+    var ids = {
+    
+      'indoor': 'indoor-category',
+      'outdoor': 'outdoor-category',
+      'succulents': 'succulents-category'
+    };
+    
+    function clearGlow() {
+      Object.values(ids).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.remove('selected-glow');
+      });
+    }
+    
+    if (select) {
+      select.addEventListener('change', function() {
+        var value = this.value;
+        clearGlow();
+        if (value === 'all') {
+          var cat = document.getElementById('categories');
+          if (cat) cat.scrollIntoView({ behavior: 'smooth' });
+        } else if (ids[value]) {
+          var card = document.getElementById(ids[value]);
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth' });
+            card.classList.add('selected-glow');
+          }
+        }
+      });
+    }
+    
+    // Google search on Enter in plant search
+    var searchInput = document.getElementById('plantSearch');
+    if (searchInput) {
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          var q = searchInput.value.trim();
+          if (q) {
+            window.open('https://www.google.com/search?q=' + encodeURIComponent(q), '_blank');
+          }
+        }
+      });
+    }
+  });
+
+  // Authentication functions
+  function checkAuthStatus() {
+    const userData = localStorage.getItem('userData');
+    const authLinks = document.getElementById('authLinks');
+    
+    if (userData) {
+      const user = JSON.parse(userData);
+      if (user.isLoggedIn) {
+        // User is logged in, show user profile
+        authLinks.innerHTML = `
+          <div class="user-profile" onclick="toggleUserMenu()">
+            <div class="user-avatar">
+              ${user.firstName ? user.firstName.charAt(0).toUpperCase() : user.name.charAt(0).toUpperCase()}
+            </div>
+            <span class="user-name">${user.firstName || user.name}</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.8rem; color: #666;"></i>
+          </div>
+          <div class="dropdown-menu" id="userDropdown">
+            <a href="profile.html" class="dropdown-item">
+              <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="favorites.html" class="dropdown-item">
+              <i class="fas fa-heart"></i> My Favorites
+            </a>
+            <a href="profile.html" class="dropdown-item">
+              <i class="fas fa-cog"></i> Settings
+            </a>
+            <a href="#" class="dropdown-item logout" onclick="logout()">
+              <i class="fas fa-sign-out-alt"></i> Sign Out
+            </a>
+          </div>
+        `;
+      } else {
+        // User is not logged in, show auth links
+        showAuthLinks();
+      }
+    } else {
+      // No user data, show auth links
+      showAuthLinks();
+    }
+  }
+
+  function showAuthLinks() {
+    const authLinks = document.getElementById('authLinks');
+    authLinks.innerHTML = `
+      <a href="login.html" class="btn-login">Sign In</a>
+      <a href="register.html" class="btn-register">Sign Up</a>
+    `;
+  }
+
+  function toggleUserMenu() {
+    const dropdown = document.getElementById('userDropdown');
+    dropdown.classList.toggle('show');
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function closeDropdown(e) {
+      if (!e.target.closest('.user-profile')) {
+        dropdown.classList.remove('show');
+        document.removeEventListener('click', closeDropdown);
+      }
+    });
+  }
+
+  function logout() {
+    // Clear user data
+    localStorage.removeItem('userData');
+    
+    // Show logout message
+    alert('You have been signed out successfully.');
+    
+    // Refresh the page to update UI
+    window.location.reload();
+  }
+</script>
+</body> 
+</html> 

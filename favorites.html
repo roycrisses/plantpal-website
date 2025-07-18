@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Favorites - PlantPal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', 'Inter', Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e9 50%, #f1f8e9 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating plant decorations */
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      width: 200px;
+      height: 200px;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,20 Q60,10 70,20 Q80,30 70,40 Q60,50 50,40 Q40,30 50,20 Z" fill="%232e7d32" opacity="0.1"/><path d="M30,60 Q40,50 50,60 Q60,70 50,80 Q40,90 30,80 Q20,70 30,60 Z" fill="%23388e3c" opacity="0.08"/><path d="M70,70 Q80,60 90,70 Q100,80 90,90 Q80,100 70,90 Q60,80 70,70 Z" fill="%2366bb6a" opacity="0.06"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      z-index: 0;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    body::before {
+      top: 10%;
+      left: 5%;
+      animation-delay: 0s;
+    }
+
+    body::after {
+      bottom: 10%;
+      right: 5%;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 2px 20px rgba(46,125,50,0.1);
+      border-bottom: 1px solid rgba(46,125,50,0.1);
+      z-index: 1000;
+    }
+
+    .nav-brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2e7d32;
+    }
+
+    .nav-brand a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-brand i {
+      font-size: 1.8rem;
+      color: #4caf50;
+    }
+
+    .nav-links a {
+      margin-left: 1.5rem;
+      font-size: 1rem;
+      color: #555;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      color: #2e7d32;
+      transform: translateY(-2px);
+    }
+
+    .main-content {
+      padding-top: 100px;
+      padding-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      color: #2e7d32;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .page-header p {
+      color: #666;
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    .favorites-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 1.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(46,125,50,0.1);
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(46,125,50,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(46,125,50,0.15);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #4caf50;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #666;
+      font-weight: 500;
+    }
+
+    .search-filter-section {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(46,125,50,0.1);
+      margin-bottom: 3rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(46,125,50,0.1);
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 300px;
+      padding: 1rem 1.5rem;
+      border: 2px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #4caf50;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(76,175,80,0.1);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.8rem 1.5rem;
+      border: 2px solid #e8e8e8;
+      border-radius: 25px;
+      background: white;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      border-color: #4caf50;
+      background: #4caf50;
+      color: white;
+    }
+
+    .favorites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .plant-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(46,125,50,0.1);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(46,125,50,0.1);
+    }
+
+    .plant-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(46,125,50,0.2);
+    }
+
+    .plant-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #4caf50, #2e7d32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plant-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .plant-card:hover .plant-image img {
+      transform: scale(1.05);
+    }
+
+    .favorite-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      color: #ff6b6b;
+      border: none;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .favorite-badge:hover {
+      color: #ff5252;
+      transform: scale(1.1);
+    }
+
+    .favorite-badge i {
+      font-size: 1.5rem;
+      animation: heartBeat 0.6s ease;
+    }
+
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(1.1); }
+      75% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .plant-info {
+      padding: 1.5rem;
+    }
+
+    .plant-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #2e7d32;
+      margin-bottom: 0.5rem;
+    }
+
+    .plant-scientific {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .plant-details {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .detail-item {
+      text-align: center;
+    }
+
+    .detail-label {
+      font-size: 0.8rem;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .detail-value {
+      font-size: 1rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .plant-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: #4caf50;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2e7d32;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #f5f5f5;
+      color: #666;
+      border: 1px solid #e0e0e0;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(46,125,50,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(46,125,50,0.1);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      color: #ccc;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+      color: #666;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .empty-state p {
+      color: #999;
+      margin-bottom: 2rem;
+    }
+
+    .btn-explore {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-explore:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(76,175,80,0.3);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 1rem;
+      }
+      
+      .page-header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .favorites-stats {
+        gap: 1rem;
+      }
+      
+      .stat-card {
+        padding: 1rem 1.5rem;
+      }
+      
+      .search-bar {
+        flex-direction: column;
+      }
+      
+      .search-input {
+        min-width: auto;
+      }
+      
+      .favorites-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      body::before,
+      body::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="dock.html">
+        <i class="fas fa-leaf"></i>PlantPal
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="dock.html">Home</a>
+      <a href="https://identify.plantnet.org/">Plants</a>
+      <a href="favorites.html">Favorites</a>
+      <a href="https://www.thrive.org.uk/get-gardening/caring-for-houseplants">Care Tips</a>
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-heart"></i> My Favorites</h1>
+        <p>Your collection of beloved plants and care reminders</p>
+      </div>
+
+      <div class="favorites-stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalFavorites">12</div>
+          <div class="stat-label">Total Favorites</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="indoorPlants">8</div>
+          <div class="stat-label">Indoor Plants</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="outdoorPlants">4</div>
+          <div class="stat-label">Outdoor Plants</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="careReminders">5</div>
+          <div class="stat-label">Care Reminders</div>
+        </div>
+      </div>
+
+      <div class="search-filter-section">
+        <div class="search-bar">
+          <input type="text" class="search-input" id="searchInput" placeholder="Search your favorite plants...">
+          <button class="action-btn btn-primary" onclick="searchPlants()">
+            <i class="fas fa-search"></i> Search
+          </button>
+        </div>
+        <div class="filter-buttons">
+          <button class="filter-btn active" onclick="filterPlants('all')">All Plants</button>
+          <button class="filter-btn" onclick="filterPlants('indoor')">Indoor</button>
+          <button class="filter-btn" onclick="filterPlants('outdoor')">Outdoor</button>
+          <button class="filter-btn" onclick="filterPlants('succulents')">Succulents</button>
+          <button class="filter-btn" onclick="filterPlants('flowering')">Flowering</button>
+        </div>
+      </div>
+
+      <div class="favorites-grid" id="favoritesGrid">
+        <!-- Plant cards will be dynamically generated here -->
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <i class="fas fa-heart-broken"></i>
+        <h3>No favorites yet</h3>
+        <p>Start building your plant collection by adding plants to your favorites!</p>
+        <a href="dock.html" class="btn-explore">
+          <i class="fas fa-search"></i> Explore Plants
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Plant database with detailed information and real images
+    const plantDatabase = {
+      "Snake Plant": {
+        scientific: "Sansevieria trifasciata",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Low",
+        lightNeeds: "Any Light",
+        careLevel: "Very Easy",
+        image: "https://i.pinimg.com/1200x/4a/73/d9/4a73d910356e9744ab418a7f1244ad74.jpg"
+      },
+      "Fiddle Leaf Fig": {
+        scientific: "Ficus lyrata",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Moderate",
+        lightNeeds: "Bright Indirect",
+        careLevel: "Moderate",
+        image: "https://i.pinimg.com/1200x/1c/20/53/1c205357736bb979b40389d1e3064891.jpg"
+      },
+      "Aloe Vera": {
+        scientific: "Aloe barbadensis",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Low",
+        lightNeeds: "Bright Light",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/736x/07/95/94/079594f8aa485447059bc63e9ea65649.jpg"
+      },
+      "Monstera Deliciosa": {
+        scientific: "Monstera deliciosa",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Moderate",
+        lightNeeds: "Bright Indirect",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/1200x/f8/29/f7/f829f712be72d70087d3a2e5f4bcb9ef.jpg"
+      },
+      "Golden Pothos": {
+        scientific: "Epipremnum aureum",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Low",
+        lightNeeds: "Low Light",
+        careLevel: "Very Easy",
+        image: "https://i.pinimg.com/736x/69/82/27/698227c4bddc98bf82260eab22548d93.jpg"
+      },
+      "ZZ Plant": {
+        scientific: "Zamioculcas zamiifolia",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Low",
+        lightNeeds: "Low Light",
+        careLevel: "Very Easy",
+        image: "https://i.pinimg.com/736x/33/c5/71/33c571eb5905de9a7f5acea3bf11263d.jpg"
+      },
+      "Peace Lily": {
+        scientific: "Spathiphyllum",
+        type: "indoor",
+        category: "flowering",
+        waterNeeds: "High",
+        lightNeeds: "Low Light",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/736x/68/2d/17/682d17899a57e938d88457b925493e95.jpg"
+      },
+      "Chinese Evergreen": {
+        scientific: "Aglaonema",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Moderate",
+        lightNeeds: "Low Light",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/736x/43/13/60/4313606b73807a3b379967a5d0d78939.jpg"
+      },
+      "Spider Plant": {
+        scientific: "Chlorophytum comosum",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Moderate",
+        lightNeeds: "Bright Indirect",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/736x/d4/12/9e/d4129ec39101e158ad352478c6e58a89.jpg"
+      },
+      "Rubber Plant": {
+        scientific: "Ficus elastica",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Moderate",
+        lightNeeds: "Bright Indirect",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/736x/57/d6/32/57d632b6c0373ba40bcd8f2062eccacb.jpg"
+      },
+      "String of Pearls": {
+        scientific: "Senecio rowleyanus",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Low",
+        lightNeeds: "Bright Light",
+        careLevel: "Moderate",
+        image: "https://i.pinimg.com/736x/2c/44/c9/2c44c9ac160ecf5891541c9dab72518e.jpg"
+      },
+      "Bird of Paradise": {
+        scientific: "Strelitzia reginae",
+        type: "indoor",
+        category: "flowering",
+        waterNeeds: "Moderate",
+        lightNeeds: "Bright Light",
+        careLevel: "Moderate",
+        image: "https://i.pinimg.com/736x/ec/a2/c3/eca2c30e0d6fd321616fd01fc40e8dab.jpg"
+      },
+      "Calathea Orbifolia": {
+        scientific: "Calathea orbifolia",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "High",
+        lightNeeds: "Bright Indirect",
+        careLevel: "Hard",
+        image: "https://i.pinimg.com/736x/cf/7f/d2/cf7fd2d293f724845526af55d53f8363.jpg"
+      },
+      "Jade Plant": {
+        scientific: "Crassula ovata",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Low",
+        lightNeeds: "Bright Light",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/736x/42/d6/15/42d6157833b8cc6cdbeaa6899f8714ae.jpg"
+      },
+      "Heartleaf Philodendron": {
+        scientific: "Philodendron hederaceum",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Moderate",
+        lightNeeds: "Low Light",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/1200x/ed/5c/ac/ed5cac5de5a4d4aaec9fa4af90e95bb7.jpg"
+      },
+      "Dracaena Marginata": {
+        scientific: "Dracaena marginata",
+        type: "indoor",
+        category: "succulents",
+        waterNeeds: "Low",
+        lightNeeds: "Low Light",
+        careLevel: "Easy",
+        image: "https://i.pinimg.com/736x/52/01/c3/5201c3f411e4e11ad624584a8826c39b.jpg"
+      }
+    };
+
+    // Load favorites from localStorage
+    let favoritePlants = [];
+    let currentFilter = 'all';
+    let filteredPlants = [];
+
+    function loadFavoritesFromStorage() {
+      const storedFavorites = JSON.parse(localStorage.getItem('plantFavorites')) || [];
+      
+      // Convert stored favorites to full plant data
+      favoritePlants = storedFavorites.map(fav => {
+        const plantInfo = plantDatabase[fav.name];
+        if (plantInfo) {
+          return {
+            id: fav.id,
+            name: fav.name,
+            price: fav.price,
+            addedAt: fav.addedAt,
+            ...plantInfo
+          };
+        }
+        return null;
+      }).filter(plant => plant !== null);
+      
+      filteredPlants = [...favoritePlants];
+    }
+
+    function renderPlants() {
+      const grid = document.getElementById('favoritesGrid');
+      const emptyState = document.getElementById('emptyState');
+      
+      if (filteredPlants.length === 0) {
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      grid.style.display = 'grid';
+      emptyState.style.display = 'none';
+      
+      grid.innerHTML = filteredPlants.map(plant => `
+        <div class="plant-card" data-id="${plant.id}">
+          <div class="plant-image">
+            <img src="${plant.image}" alt="${plant.name}" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="favorite-badge" onclick="removeFromFavorites('${plant.name}')">
+              <i class="fas fa-heart"></i>
+            </div>
+          </div>
+          <div class="plant-info">
+            <div class="plant-name">${plant.name}</div>
+            <div class="plant-scientific">${plant.scientific}</div>
+            <div class="plant-details">
+              <div class="detail-item">
+                <div class="detail-label">Water</div>
+                <div class="detail-value">${plant.waterNeeds}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Light</div>
+                <div class="detail-value">${plant.lightNeeds}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Care</div>
+                <div class="detail-value">${plant.careLevel}</div>
+              </div>
+            </div>
+            <div class="plant-actions">
+              <button class="action-btn btn-primary" onclick="viewPlantDetails('${plant.name}')">
+                <i class="fas fa-info-circle"></i> Details
+              </button>
+              <button class="action-btn btn-secondary" onclick="setCareReminder('${plant.name}')">
+                <i class="fas fa-bell"></i> Reminder
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterPlants(filter) {
+      currentFilter = filter;
+      
+      // Update filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Filter plants
+      if (filter === 'all') {
+        filteredPlants = [...favoritePlants];
+      } else {
+        filteredPlants = favoritePlants.filter(plant => 
+          plant.type === filter || plant.category === filter
+        );
+      }
+      
+      renderPlants();
+      updateStats();
+    }
+
+    function searchPlants() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      
+      filteredPlants = favoritePlants.filter(plant =>
+        plant.name.toLowerCase().includes(searchTerm) ||
+        plant.scientific.toLowerCase().includes(searchTerm)
+      );
+      
+      renderPlants();
+      updateStats();
+    }
+
+    function removeFromFavorites(plantName) {
+      const index = favoritePlants.findIndex(plant => plant.name === plantName);
+      if (index > -1) {
+        favoritePlants.splice(index, 1);
+        filteredPlants = filteredPlants.filter(plant => plant.name !== plantName);
+        
+        // Update localStorage
+        const storedFavorites = JSON.parse(localStorage.getItem('plantFavorites')) || [];
+        const updatedFavorites = storedFavorites.filter(fav => fav.name !== plantName);
+        localStorage.setItem('plantFavorites', JSON.stringify(updatedFavorites));
+        
+        renderPlants();
+        updateStats();
+        
+        // Show notification
+        showNotification(`${plantName} removed from favorites!`, 'success');
+      }
+    }
+
+    function viewPlantDetails(plantName) {
+      const plant = favoritePlants.find(p => p.name === plantName);
+      if (plant) {
+        alert(`Plant Details:\n\nName: ${plant.name}\nScientific Name: ${plant.scientific}\nWater Needs: ${plant.waterNeeds}\nLight Needs: ${plant.lightNeeds}\nCare Level: ${plant.careLevel}\nPrice: $${plant.price}`);
+      }
+    }
+
+    function setCareReminder(plantName) {
+      const plant = favoritePlants.find(p => p.name === plantName);
+      if (plant) {
+        alert(`Care reminder set for ${plant.name}!\n\nYou'll receive notifications for watering and care tasks.`);
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('totalFavorites').textContent = favoritePlants.length;
+      document.getElementById('indoorPlants').textContent = favoritePlants.filter(p => p.type === 'indoor').length;
+      document.getElementById('outdoorPlants').textContent = favoritePlants.filter(p => p.type === 'outdoor').length;
+      document.getElementById('careReminders').textContent = Math.floor(Math.random() * 8) + 2; // Random number for demo
+    }
+
+    function showNotification(message, type) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? '#4caf50' : '#f44336'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+      `;
+      notification.textContent = message;
+      
+      document.body.appendChild(notification);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadFavoritesFromStorage();
+      renderPlants();
+      updateStats();
+      
+      // Add search input event listener
+      document.getElementById('searchInput').addEventListener('input', searchPlants);
+    });
+  </script>
+</body>
+</html> 

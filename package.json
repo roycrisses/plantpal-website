@@ -1,0 +1,19 @@
+{
+  "name": "plantpal-website",
+  "version": "1.0.0",
+  "description": "PlantPal - Your Plant Care Companion",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'This is a static site. Open index.html in your browser.'"
+  },
+  "keywords": [
+    "plants",
+    "gardening",
+    "static-site",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "author": "PlantPal Team",
+  "license": "MIT"
+}
